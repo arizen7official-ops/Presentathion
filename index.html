@@ -29,7 +29,7 @@
             justify-content: center;
             align-items: center;
             position: absolute;
-            background-color: #DA0101; /* Фирменный цвет фона */
+            background-color: #DA0101;
         }
         .slide-container.active {
             display: flex;
@@ -39,25 +39,12 @@
             height: 100%;
             object-fit: contain;
         }
-        /* Страховка, если какая-то картинка не загрузится */
         .demo-placeholder {
             color: white;
             font-size: 80px;
             font-weight: bold;
             text-align: center;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        .hint {
-            position: fixed;
-            bottom: 15px;
-            right: 25px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 16px;
-            pointer-events: none;
-            z-index: 1000;
-            background: rgba(0,0,0,0.3);
-            padding: 8px 15px;
-            border-radius: 5px;
         }
     </style>
 </head>
@@ -77,7 +64,7 @@
 
     <!-- ВИДЕО (сразу после 2-го слайда) -->
     <div class="slide-container" id="step-2">
-        <video id="presentation-video" controls>
+        <video id="presentation-video" controls autoplay muted playsinline style="width: 100%; height: 100%; object-fit: contain;">
             <source src="video.mp4" type="video/mp4">
             Ваш браузер не поддерживает видео.
         </video>
@@ -131,8 +118,6 @@
         <div class="demo-placeholder" style="display:none;">Слайд 10</div>
     </div>
 
-    <div class="hint">Управление: Клик или Пробел / Стрелки ← →</div>
-
     <script>
         let currentStep = 0;
         const slides = document.querySelectorAll('.slide-container');
@@ -143,7 +128,6 @@
                     slide.classList.add('active');
                 } else {
                     slide.classList.remove('active');
-                    // Автоматически ставим видео на паузу при уходе с него
                     const vid = slide.querySelector('video');
                     if (vid) {
                         vid.pause();
@@ -153,13 +137,26 @@
             });
         }
 
-        document.addEventListener('click', () => {
-            if (currentStep < slides.length - 1) {
-                currentStep++;
-                showStep(currentStep);
+        // Обработка клика по сторонам экрана
+        document.addEventListener('click', (e) => {
+            const screenWidth = window.innerWidth;
+            const clickX = e.clientX;
+
+            // Если клик справа — вперед, если слева — назад
+            if (clickX > screenWidth / 2) {
+                if (currentStep < slides.length - 1) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            } else {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
             }
         });
 
+        // Дублируем управление клавиатурой (стрелки и пробел)
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'Enter') {
                 e.preventDefault();
