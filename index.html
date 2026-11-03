@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Презентация - Биохимические процессы</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide-container {
+            width: 1920px;
+            height: 1080px;
+            max-width: 100vw;
+            max-height: 100vh;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            background-color: #DA0101; /* Фирменный цвет фона */
+        }
+        .slide-container.active {
+            display: flex;
+        }
+        img, video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        /* Страховка, если какая-то картинка не загрузится */
+        .demo-placeholder {
+            color: white;
+            font-size: 80px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .hint {
+            position: fixed;
+            bottom: 15px;
+            right: 25px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            pointer-events: none;
+            z-index: 1000;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Слайд 1 -->
+    <div class="slide-container active" id="step-0">
+        <img src="png1.png" alt="Слайд 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 1</div>
+    </div>
+
+    <!-- Слайд 2 -->
+    <div class="slide-container" id="step-1">
+        <img src="png2.png" alt="Слайд 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 2</div>
+    </div>
+
+    <!-- ВИДЕО (сразу после 2-го слайда) -->
+    <div class="slide-container" id="step-2">
+        <video id="presentation-video" controls>
+            <source src="video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+    </div>
+
+    <!-- Слайд 3 -->
+    <div class="slide-container" id="step-3">
+        <img src="png3.png" alt="Слайд 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 3</div>
+    </div>
+
+    <!-- Слайд 4 -->
+    <div class="slide-container" id="step-4">
+        <img src="png4.png" alt="Слайд 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 4</div>
+    </div>
+
+    <!-- Слайд 5 -->
+    <div class="slide-container" id="step-5">
+        <img src="png5.png" alt="Слайд 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 5</div>
+    </div>
+
+    <!-- Слайд 6 -->
+    <div class="slide-container" id="step-6">
+        <img src="png6.png" alt="Слайд 6" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 6</div>
+    </div>
+
+    <!-- Слайд 7 -->
+    <div class="slide-container" id="step-7">
+        <img src="png7.png" alt="Слайд 7" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 7</div>
+    </div>
+
+    <!-- Слайд 8 -->
+    <div class="slide-container" id="step-8">
+        <img src="png8.png" alt="Слайд 8" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 8</div>
+    </div>
+
+    <!-- Слайд 9 -->
+    <div class="slide-container" id="step-9">
+        <img src="png9.png" alt="Слайд 9" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 9</div>
+    </div>
+
+    <!-- Слайд 10 -->
+    <div class="slide-container" id="step-10">
+        <img src="png10.png" alt="Слайд 10" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="demo-placeholder" style="display:none;">Слайд 10</div>
+    </div>
+
+    <div class="hint">Управление: Клик или Пробел / Стрелки ← →</div>
+
+    <script>
+        let currentStep = 0;
+        const slides = document.querySelectorAll('.slide-container');
+
+        function showStep(step) {
+            slides.forEach((slide, index) => {
+                if (index === step) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                    // Автоматически ставим видео на паузу при уходе с него
+                    const vid = slide.querySelector('video');
+                    if (vid) {
+                        vid.pause();
+                        vid.currentTime = 0;
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('click', () => {
+            if (currentStep < slides.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'Enter') {
+                e.preventDefault();
+                if (currentStep < slides.length - 1) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            } else if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
